@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+
+    analise:
+        container_name: analise
+        build: .
+        environment:
+            QUEUE_HOST: rabbitmq
+            DATABASE_HOST: mongo
+        networks: 
+            - rabbitmq-network
+            - db-nosql-network 
+
+        logging:
+            driver: syslog
+            options:
+                syslog-address: "udp://logs2.papertrailapp.com:53684"
+                tag: "{{.Name}}/{{.ID}}"
+
+
+
+networks:
+    # tcc:
+    #     external: true
+    #     name: tcc-network
+
+    rabbitmq-network:
+        name: rabbitmq-network
+        external: true
+
+    db-nosql-network:
+        name: db-nosql-network 
+        external: true
